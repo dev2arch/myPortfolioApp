@@ -16,6 +16,29 @@ import {
 } from 'lucide-react';
 
 const TechStackSection = () => {
+  const [statistics, setStatistics] = useState({
+    yearsOfExperience: 14,
+    technologiesUsed: 30,
+    projectsCompleted: 25,
+    companiesWorked: 8
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStatistics();
+  }, []);
+
+  const fetchStatistics = async () => {
+    try {
+      const stats = await statisticsApi.getStatistics();
+      setStatistics(stats);
+    } catch (error) {
+      console.error('Error fetching statistics:', error);
+      // Keep default values if API fails
+    } finally {
+      setLoading(false);
+    }
+  };
   const techCategories = [
     {
       title: "Frontend",
