@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Calendar, Clock, User, ArrowRight, Search, Filter } from 'lucide-react';
-import { mockData } from '../mock/mockData';
+import { blogApi } from '../services/api';
 
 const BlogSection = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
