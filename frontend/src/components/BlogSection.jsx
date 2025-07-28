@@ -9,10 +9,40 @@ const BlogSection = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
   const [showAll, setShowAll] = useState(false);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [categories, setCategories] = useState(['All']);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const categories = ['All', 'AI & Machine Learning', 'Leadership', 'Architecture', 'IoT', 'Cloud', 'Frontend'];
+  // Fetch blog posts and categories on component mount
+  useEffect(() => {
+    fetchBlogPosts();
+    fetchCategories();
+  }, []);
 
-  const filteredPosts = mockData.blogPosts.filter(post => {
+  const fetchBlogPosts = async () => {
+    try {
+      setLoading(true);
+      const posts = await blogApi.getBlogPosts();
+      setBlogPosts(posts);
+    } catch (err) {
+      console.error('Error fetching blog posts:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await blogApi.getBlogCategories();
+      setCategories(['All', ...response.categories]);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
+  };
+
+  const filteredPosts = blogPosts.filter(post => {
     const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -21,7 +51,7 @@ const BlogSection = () => {
   });
 
   const displayedPosts = showAll ? filteredPosts : filteredPosts.slice(0, 3);
-  const featuredPost = mockData.blogPosts.find(post => post.featured);
+  const featuredPost = blogPosts.find(post => post.featured);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -30,6 +60,41 @@ const BlogSection = () => {
       day: 'numeric'
     });
   };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Engineering Thoughts</h2>
+            <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">Engineering Thoughts</h2>
+            <div className="w-24 h-1 bg-blue-600 mx-auto mb-8"></div>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <p className="text-red-600">Error loading blog posts: {error}</p>
+              <Button onClick={fetchBlogPosts} className="mt-4">
+                Try Again
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-slate-50">
