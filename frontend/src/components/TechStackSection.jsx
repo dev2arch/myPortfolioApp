@@ -197,19 +197,27 @@ const TechStackSection = () => {
         <div className="mt-16 text-center">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div className="bg-blue-50 rounded-lg p-6">
-              <div className="text-3xl font-bold text-blue-600 mb-2">14+</div>
+              <div className="text-3xl font-bold text-blue-600 mb-2">
+                {loading ? '...' : `${statistics.yearsOfExperience}+`}
+              </div>
               <div className="text-slate-600">Years Experience</div>
             </div>
             <div className="bg-green-50 rounded-lg p-6">
-              <div className="text-3xl font-bold text-green-600 mb-2">30+</div>
+              <div className="text-3xl font-bold text-green-600 mb-2">
+                {loading ? '...' : `${statistics.technologiesUsed}+`}
+              </div>
               <div className="text-slate-600">Technologies</div>
             </div>
             <div className="bg-purple-50 rounded-lg p-6">
-              <div className="text-3xl font-bold text-purple-600 mb-2">25+</div>
+              <div className="text-3xl font-bold text-purple-600 mb-2">
+                {loading ? '...' : `${statistics.projectsCompleted}+`}
+              </div>
               <div className="text-slate-600">Projects Delivered</div>
             </div>
             <div className="bg-orange-50 rounded-lg p-6">
-              <div className="text-3xl font-bold text-orange-600 mb-2">8+</div>
+              <div className="text-3xl font-bold text-orange-600 mb-2">
+                {loading ? '...' : `${statistics.companiesWorked}+`}
+              </div>
               <div className="text-slate-600">Companies</div>
             </div>
           </div>
