@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
+import { statisticsApi } from '../services/api';
 import { 
   Code2, 
   Globe, 
